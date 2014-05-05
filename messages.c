@@ -280,6 +280,27 @@ bool cmd_window(char **args, int num)
                     return false;
             }
             dirty = true;
+        } else if (streq("-S", *args) || streq("--resize", *args)) {
+            num--, args++;
+            if (num < 2)
+                return false;
+            direction_t dir;
+            if (!parse_direction(*args, &dir))
+                return false;
+            if (! trg.node->client->floating)
+                return false;
+            num--, args++;
+            if ((*args)[0] == '+' || (*args)[0] == '-') {
+                int pix;
+                if (sscanf(*args, "%i", &pix) == 1) {
+                    window_move_resize_direction(trg.node->client, dir, pix);
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+            dirty = true;
         } else if (streq("-r", *args) || streq("--ratio", *args)) {
             num--, args++;
             if (num < 1)
@@ -321,7 +342,6 @@ bool cmd_window(char **args, int num)
         } else {
             return false;
         }
-
         num--, args++;
     }
 

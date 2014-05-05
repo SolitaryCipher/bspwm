@@ -578,6 +578,48 @@ void window_move_resize(xcb_window_t win, int16_t x, int16_t y, uint16_t w, uint
     xcb_configure_window(dpy, win, XCB_CONFIG_WINDOW_X_Y_WIDTH_HEIGHT, values);
 }
 
+void window_move_resize_direction(client_t *c, direction_t dir, int pix)
+{
+    int x = 0, y = 0, h = 1, w = 1;
+    int height;
+    int width;
+
+    xcb_window_t win = c->window;
+    xcb_rectangle_t rect = c->floating_rectangle;
+
+    switch (dir) {
+        case DIR_UP:
+            x = rect.x;
+            y = rect.y + pix;
+            w = rect.width;
+            h = rect.height - pix;
+            break;
+        case DIR_RIGHT:
+            x = rect.x;
+            y = rect.y;
+            w = rect.width + pix;
+            h = rect.height;
+            break;
+        case DIR_DOWN:
+            x = rect.x;
+            y = rect.y;
+            w = rect.width;
+            h = rect.height + pix;
+            break;
+        case DIR_LEFT:
+            x = rect.x + pix;
+            y = rect.y;
+            w = rect.width - pix;
+            h = rect.height;
+            break;
+    }
+    width = MAX(1, w);
+    height = MAX(1, h);
+    c->floating_rectangle = (xcb_rectangle_t) {x, y, width, height};
+    window_move_resize(win, x, y, width, height);
+}
+
+
 void window_raise(xcb_window_t win)
 {
     uint32_t values[] = {XCB_STACK_MODE_ABOVE};
