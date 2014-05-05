@@ -346,6 +346,9 @@ Options
 *-e*, *--edge* 'DIR' 'RATIO'|±'PIXELS'::
     Set or change the splitting ratio of the edge located in the given direction in relation to the selected window.
 
+*-S*, *--resize* 'DIR' ±'PIXELS'::
+    Resize a floating window in the given direction
+
 *-R*, *--rotate* 'DIR' '90|270|180'::
     Rotate the tree holding the edge located in the given direction in relation to the selected window.
 
